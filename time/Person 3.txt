@@ -1,0 +1,1 @@
+Time to Reach the Goal by person 3 = 8.862000000000004 seconds

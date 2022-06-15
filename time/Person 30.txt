@@ -1,0 +1,1 @@
+Time to Reach the Goal by person 30 = 12.651000000000007 seconds

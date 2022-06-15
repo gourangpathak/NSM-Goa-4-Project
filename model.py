@@ -1,6 +1,7 @@
 # Programming evacuation systems using Crowd Simulation
 # Agent-Based Modelling
 # Loading the pygame package
+from turtle import screensize
 import pygame
 # Importing locals
 from pygame.locals import *
@@ -10,19 +11,39 @@ import numpy as np
 import numpy.random as random
 import math
 import time
-from model_parameters import positionmatrix,nr_experiments,nr_agents,walls,distance_agent_to_wall,normalize,g
+import os
+from model_parameters import positionmatrix,nr_agents,walls,distance_agent_to_wall,normalize,g
 
-data_matrix = np.zeros((nr_experiments*nr_agents, 4)) 
+a = 1
+while a <= nr_agents:
+    path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\positions'
+    file_name1 = "Person " + str(a) +".txt"
+    file_name2 = "Person " + str(a) +".txt"
+        
+    with open(os.path.join(path, file_name1), 'w') as fp:
+        fp.write("Person " + str(a) + "\n")
+        fp.write("Starting Position = ")
+    a += 1
 
-# Initializing Pygame and font
+b = 1
+while b <= nr_agents:
+    path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\time'
+    file_name1 = "Person " + str(b) +".txt"
+    file_name2 = "Person " + str(b) +".txt"
+        
+    with open(os.path.join(path, file_name2), 'w') as fp:
+        fp.write("")
+    b += 1
+
+data_folder1 = os.path.join(os.getcwd(), 'positions')
+data_folder2 = os.path.join(os.getcwd(), 'time')
+
 pygame.init()
 pygame.font.init() 
 timefont = pygame.font.SysFont('John Hubbard', 30)
 
 """ 
-
 Creating a screen with a room that is smaller than then screen 
-
 """
 
 # Size of the screen
@@ -48,7 +69,7 @@ clock = pygame.time.Clock()
 # Creating evacuation object class
 class Agent(object):
     def __init__(self):
-        
+        self.agentNumber = 0
         self.mass = 80 # random.uniform(40,90)
         self.radius = 20
         # random initialize a agent
@@ -63,7 +84,8 @@ class Agent(object):
         self.aVelocity = np.array([self.aVelocityX, self.aVelocityY])
         #self.actualV = np.array([0.0, 0.0])
     
-        self.dest = np.array([random.uniform(100,700),random.uniform(100,700)])
+        # self.dest = np.array([random.uniform(100,700),random.uniform(100,700)])
+        self.dest = np.array([700,400])
         self.direction = normalize(self.dest - self.pos)
         #self.direction = np.array([0.0, 0.0])
         
@@ -78,7 +100,7 @@ class Agent(object):
         self.F = 2000
         self.delta = 0.08*50  #random.uniform(0.8,1.6) #0.8 #0.08
         
-        self.Goal = 0
+        self.Goal = 0 # this represents if door is reached or not
         self.time = 0.0
         self.countcollision = 0
     	
@@ -110,24 +132,6 @@ class Agent(object):
         value = -self.F*np.exp((r_i-d_iw)/self.delta)*e_iw # Assume wall and people give same force
         + self.bodyFactor*g(r_i-d_iw)*e_iw
         return value
-    
-    def update_dest(self):
-        dist = math.sqrt((self.pos[0]-700)**2 + (self.pos[1]-400)**2)
-        if dist < 300:
-            self.dest = np.array([700,400])
-        else:
-            self.dest = np.array([700,400])
-            """self.dest = normalize(self.dest-self.pos) * 1000 + self.dest
-            if self.pos[1] > 690 - self.radius: 
-                self.dest = np.array([700,self.pos[1]]) # turn left
-            elif self.pos[1] < 110 + self.radius:
-                self.dest = np.array([700,self.pos[1]]) # turn right
-            elif self.pos[0] < 110 + self.radius and self.pos[1] < 400:
-                self.dest = np.array([self.pos[0], 100]) # turn right
-            elif self.pos[0] < 110 + self.radius:
-                self.dest = np.array([self.pos[0], 700]) # turn left  """
-            
-
 
 def main():
     # Now to let multiple objects move to the door we define
@@ -146,9 +150,11 @@ def main():
     # initialize agents
     agents = []
     
+    # initialize the persons and their positions
     def positions(agents):
         for i in range(nr_agents):
             agent = Agent()
+            agent.agentNumber = i+1
             agent.walls = walls
             agent.x = positionmatrix[i][0]
             agent.y = positionmatrix[i][1]
@@ -158,9 +164,10 @@ def main():
             agent.dSpeed = positionmatrix[i][4]
             agents.append(agent)
         
-    
+    # call the positions method
     positions(agents)    
     
+    # count to loop over our persons
     count = 0
     start_time = time.time()
     run = True
@@ -174,11 +181,7 @@ def main():
             elapsed_time = current_time - start_time
         else:
             for agent_i in agents:
-                data_matrix[nr_agents - 2][0] = elapsed_time
-                data_matrix[nr_agents - 1][0] = elapsed_time
                 agents.remove(agent_i)
-            for k in range(0, nr_agents):
-                data_matrix[k][1] = elapsed_time
         
         # Finding delta t for this frame
         dt = clock.tick(70)/1000
@@ -201,7 +204,6 @@ def main():
             pygame.draw.line(roomscreen, line_color, start_posx, end_posx, 3)
         
         for agent_i in agents:
-            agent_i.update_dest()
             agent_i.direction = normalize(agent_i.dest - agent_i.pos)
             agent_i.dVelocity = agent_i.dSpeed*agent_i.direction
             aVelocity_force = agent_i.velocity_force()
@@ -219,54 +221,40 @@ def main():
             dv_dt = sumForce/agent_i.mass
             agent_i.aVelocity = agent_i.aVelocity + dv_dt*dt 
             agent_i.pos = agent_i.pos + agent_i.aVelocity*dt
-            
+
+            path = str("positions/Person " + str(agent_i.agentNumber)+".txt")
+            f = open(path, "a")
+            f.write("("+str(agent_i.pos[0])+","+str(agent_i.pos[1])+ ")\n")
+            f.close()
+
             # Avoiding disappearing agents   
             if agent_i.pos[0] > 750 or agent_i.pos[0] < 50 or agent_i.pos[1] > 750 or agent_i.pos[1] < 50:
                 main()
                 sys.exit()
-        
-        for agent_i in agents:
             
             agent_i.time += clock.get_time()/1000 
-            start_position = [0, 0]
-            start_position[0] = int(agent_i.pos[0])
-            start_position[1] = int(agent_i.pos[1])
-            
-            end_position = [0, 0]
-            end_position[0] = int(agent_i.pos[0] + agent_i.aVelocity[0])
-            end_position[1] = int(agent_i.pos[1] + agent_i.aVelocity[1])
         
-            end_positionDV = [0, 0]
-            end_positionDV[0] = int(agent_i.pos[0] + agent_i.dVelocity[0])
-            end_positionDV[1] = int(agent_i.pos[1] + agent_i.dVelocity[1])
-        
-            if start_position[0] >= 699 and agent_i.Goal == 0:
+            if int(agent_i.pos[0]) >= 699 and agent_i.Goal == 0:
                 agent_i.Goal = 1
-                data_matrix[count][0] =  agent_i.time
-                print('Time to Reach the Goal:', agent_i.time)
+                path = str("time/Person " + str(agent_i.agentNumber)+".txt")
+                f = open(path, "a")
+                f.write('Time to Reach the Goal by person '+ str(agent_i.agentNumber) + " = " + str(agent_i.time) + " seconds\n")
+                f.close()
             
-            if start_position[0] > 699 or start_position[0] < 100:
-                data_matrix[count][2] = count 
-                data_matrix[count][3] = agent_i.countcollision 
+            if int(agent_i.pos[0]) > 699 or int(agent_i.pos[0]) < 100:
                 count += 1
                 agents.remove(agent_i)
             
-            pygame.draw.circle(roomscreen, agent_color, start_position, round(agent_i.radius), 3)
-            # pygame.draw.line(roomscreen, agent_color, start_position, end_positionDV, 2)
-        #visibility
-        # pygame.draw.circle(roomscreen, RED, [700,400], 300, 1)
-        
-        # pygame.draw.line(roomscreen, [255,60,0], start_position, end_positionDV, 2)
+            pygame.draw.circle(roomscreen, agent_color, agent_i.pos, round(agent_i.radius), 3)
         
         # Present text on screen
         timestr = "Timer : " +  str(elapsed_time)
         timesurface = timefont.render(timestr, False, (255, 255, 255))
-        roomscreen.blit(timesurface,(0,0))
+        roomscreen.blit(timesurface,(250,80))
+
         # Update the screen
         pygame.display.flip()
         
     pygame.quit()
-    print(data_matrix)
 main()
-#np.savetxt('room1_vis', data_matrix)
 

@@ -1,0 +1,1 @@
+Time to Reach the Goal by person 42 = 26.564000000000025 seconds

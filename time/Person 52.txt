@@ -1,0 +1,1 @@
+Time to Reach the Goal by person 52 = 7.623000000000003 seconds

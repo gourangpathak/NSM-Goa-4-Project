@@ -6,8 +6,8 @@ import numpy.random as random
 # Setting seed
 random.seed(123)
 # Creating a dataset
-nr_agents = 75
-nr_experiments = 1
+nr_agents = 90
+
 # Walls list to check
 room_height = 600 # height of the room
 room_width = 600 # width of the room
