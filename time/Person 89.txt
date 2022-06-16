@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 89 = 6.814000000000003 seconds
+Time to Reach the Goal by person 89 = 6.865999999999996 seconds

@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 32 = 11.580000000000005 seconds
+Time to Reach the Goal by person 32 = 11.622999999999998 seconds

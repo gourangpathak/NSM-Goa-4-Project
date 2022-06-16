@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 73 = 28.254999999999974 seconds
+Time to Reach the Goal by person 73 = 27.71699999999992 seconds

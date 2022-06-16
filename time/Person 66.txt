@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 66 = 20.044000000000008 seconds
+Time to Reach the Goal by person 66 = 19.947999999999972 seconds

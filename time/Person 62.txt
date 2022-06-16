@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 62 = 27.61699999999999 seconds
+Time to Reach the Goal by person 62 = 27.159999999999936 seconds

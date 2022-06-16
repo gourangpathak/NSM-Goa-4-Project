@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 13 = 25.063000000000034 seconds
+Time to Reach the Goal by person 13 = 24.76899999999998 seconds

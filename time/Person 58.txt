@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 58 = 18.980000000000015 seconds
+Time to Reach the Goal by person 58 = 18.50899999999998 seconds

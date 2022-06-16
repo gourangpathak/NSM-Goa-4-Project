@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 40 = 25.929000000000023 seconds
+Time to Reach the Goal by person 40 = 30.06499999999989 seconds

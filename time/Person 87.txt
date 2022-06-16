@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 87 = 26.253000000000025 seconds
+Time to Reach the Goal by person 87 = 30.368999999999893 seconds

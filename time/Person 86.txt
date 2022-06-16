@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 86 = 37.64900000000077 seconds
+Time to Reach the Goal by person 86 = 44.88300000000144 seconds

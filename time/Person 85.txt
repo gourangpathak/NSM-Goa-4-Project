@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 85 = 30.720000000000013 seconds
+Time to Reach the Goal by person 85 = 32.03999999999985 seconds

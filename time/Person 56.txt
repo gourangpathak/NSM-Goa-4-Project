@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 56 = 35.54500000000055 seconds
+Time to Reach the Goal by person 56 = 36.023000000000366 seconds

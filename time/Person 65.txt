@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 65 = 21.283000000000023 seconds
+Time to Reach the Goal by person 65 = 23.08599999999998 seconds

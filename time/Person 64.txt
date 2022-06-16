@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 64 = 26.996 seconds
+Time to Reach the Goal by person 64 = 22.402999999999974 seconds

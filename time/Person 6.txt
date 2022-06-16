@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 6 = 33.8290000000003 seconds
+Time to Reach the Goal by person 6 = 37.03200000000049 seconds

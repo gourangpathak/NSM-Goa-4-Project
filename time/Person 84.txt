@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 84 = 31.13200000000003 seconds
+Time to Reach the Goal by person 84 = 40.00100000000087 seconds

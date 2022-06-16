@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 22 = 8.501000000000005 seconds
+Time to Reach the Goal by person 22 = 8.464999999999996 seconds

@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 8 = 32.11300000000006 seconds
+Time to Reach the Goal by person 8 = 33.39600000000001 seconds

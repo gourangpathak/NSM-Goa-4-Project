@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 72 = 22.71900000000004 seconds
+Time to Reach the Goal by person 72 = 25.221999999999973 seconds

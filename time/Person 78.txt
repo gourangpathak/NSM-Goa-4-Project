@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 78 = 32.66600000000013 seconds
+Time to Reach the Goal by person 78 = 32.64799999999989 seconds

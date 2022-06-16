@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 36 = 28.885999999999964 seconds
+Time to Reach the Goal by person 36 = 28.886999999999883 seconds

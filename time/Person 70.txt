@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 70 = 11.872000000000005 seconds
+Time to Reach the Goal by person 70 = 12.586999999999998 seconds

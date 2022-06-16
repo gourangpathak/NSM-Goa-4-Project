@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 48 = 38.84200000000093 seconds
+Time to Reach the Goal by person 48 = 34.869000000000185 seconds

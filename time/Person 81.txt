@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 81 = 24.02300000000005 seconds
+Time to Reach the Goal by person 81 = 23.166999999999977 seconds

@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 50 = 9.567000000000005 seconds
+Time to Reach the Goal by person 50 = 9.702999999999998 seconds

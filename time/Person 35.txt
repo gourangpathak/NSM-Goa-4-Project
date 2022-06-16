@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 35 = 18.27300000000002 seconds
+Time to Reach the Goal by person 35 = 18.183999999999987 seconds

@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 28 = 4.047999999999999 seconds
+Time to Reach the Goal by person 28 = 4.1469999999999985 seconds

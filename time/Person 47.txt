@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 47 = 23.20800000000005 seconds
+Time to Reach the Goal by person 47 = 23.561999999999973 seconds

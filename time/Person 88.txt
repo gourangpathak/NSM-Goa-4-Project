@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 88 = 16.180000000000014 seconds
+Time to Reach the Goal by person 88 = 16.307 seconds

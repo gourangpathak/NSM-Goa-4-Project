@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 24 = 34.47300000000041 seconds
+Time to Reach the Goal by person 24 = 34.07400000000006 seconds

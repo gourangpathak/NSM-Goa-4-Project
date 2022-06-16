@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 75 = 39.52900000000103 seconds
+Time to Reach the Goal by person 75 = 39.02200000000076 seconds

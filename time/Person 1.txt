@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 1 = 12.473000000000008 seconds
+Time to Reach the Goal by person 1 = 12.987999999999998 seconds

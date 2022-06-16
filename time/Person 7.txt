@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 7 = 21.02400000000002 seconds
+Time to Reach the Goal by person 7 = 20.843999999999976 seconds

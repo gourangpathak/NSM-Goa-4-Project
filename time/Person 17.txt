@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 17 = 19.333000000000016 seconds
+Time to Reach the Goal by person 17 = 19.34699999999998 seconds

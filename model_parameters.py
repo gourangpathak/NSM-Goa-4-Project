@@ -6,7 +6,7 @@ import numpy.random as random
 # Setting seed
 random.seed(123)
 # Creating a dataset
-nr_agents = 90
+nr_persons = 90
 
 # Walls list to check
 room_height = 600 # height of the room
@@ -27,7 +27,7 @@ def normalize(v):
 def g(x):
     return np.max(x, 0)   
 
-def distance_agent_to_wall(point, wall):
+def distance_Person_to_wall(point, wall):
     p0 = np.array([wall[0],wall[1]])
     p1 = np.array([wall[2],wall[3]])
     d = p1-p0
@@ -57,8 +57,8 @@ positionmatrix = []
 # For all experiments
 # for j in range(0,nr_experiments):
 # nr_experiment = j + 1
-agents_found = 0 
-for i in range(0,nr_agents): # For all objects   
+persons_found = 0 
+for i in range(0,nr_persons): # For all objects   
     # We start by finding a random position in the room which satisfies our requirements
     found = False
     countwall = 0
@@ -71,7 +71,7 @@ for i in range(0,nr_agents): # For all objects
         object_y = np.random.uniform(100,700) # random y coordinate in room
         for wall in walls:
             r_i = radius
-            d_iw,e_iw = distance_agent_to_wall(np.array([object_x, object_y]),wall)
+            d_iw,e_iw = distance_Person_to_wall(np.array([object_x, object_y]),wall)
             '''
             here for each wall we are calculating the distance between the wall and
             the person if the distance between the wall and the person is less than the
@@ -82,31 +82,32 @@ for i in range(0,nr_agents): # For all objects
                 countwall += 1
         
         # if there are some positions initialized
-        if len([positionmatrix[i] for i in range(0, agents_found)]) > 0:
+        if len([positionmatrix[i] for i in range(0, persons_found)]) > 0:
             '''
-            The countagents variable will count how many persons found so far
+            The countpersons
+         variable will count how many persons found so far
             are valid i.e. for all other persons shoulders the sum of their shoulder
             radius and that of our current person which we are looking for should be less
             than the distance between the 2 persons
             '''
-            countagents = 0 
+            countpersons = 0 
             # loop over other people
-            for position in [positionmatrix[i] for i in range(0, agents_found)]:
+            for position in [positionmatrix[i] for i in range(0, persons_found)]:
                 # find out the distance between others and our current person
                 dist = math.sqrt((position[0]-object_x)**2 + (position[1]-object_y)**2)
                 # if valid (i.e. for all other persons shoulders the sum of their shoulder
                 # radius and that of our current person which we are looking for should be less
                 # than the distance between the 2 persons) then increment person count
                 if dist > position[2] + radius: 
-                    countagents += 1
+                    countpersons += 1
             # If the number of persons found so far which are valid is equal to the 
-            if countagents == i and countwall == 0:
+            if countpersons == i and countwall == 0:
                 found = True
-                agents_found += 1 
+                persons_found += 1 
         # if none of the positions are initialized & the wall interaction = 0 then just 
         # increment the number of persons found
         elif countwall == 0:
             found = True
-            agents_found += 1 
+            persons_found += 1 
 
     positionmatrix.append([object_x, object_y, radius, mass, desiredS])
