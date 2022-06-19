@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 19 = 1.7939999999999998 seconds
+Time to Reach the Goal by person 19 = 1.8389999999999997 seconds

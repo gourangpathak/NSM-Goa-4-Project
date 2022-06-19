@@ -1,1 +1,0 @@
-Time to Reach the Goal by person 10 = 18.181999999999984 seconds

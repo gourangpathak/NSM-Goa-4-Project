@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 57 = 3.114999999999999 seconds
+Time to Reach the Goal by person 57 = 3.186 seconds
