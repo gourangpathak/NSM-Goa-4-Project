@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 8 = 35.91600000000046 seconds

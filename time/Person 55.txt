@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 55 = 17.083000000000006 seconds

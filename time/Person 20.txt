@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 20 = 17.60900000000001 seconds

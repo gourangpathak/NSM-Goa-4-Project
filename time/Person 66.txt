@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 66 = 19.642000000000014 seconds

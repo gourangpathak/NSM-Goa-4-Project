@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 86 = 37.18900000000057 seconds

@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 32 = 11.528 seconds

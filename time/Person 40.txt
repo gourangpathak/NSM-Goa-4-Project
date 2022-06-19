@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 40 = 34.56800000000027 seconds

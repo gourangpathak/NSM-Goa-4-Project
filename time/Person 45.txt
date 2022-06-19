@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 45 = 5.063 seconds

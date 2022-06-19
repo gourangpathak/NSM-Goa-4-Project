@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 17 = 18.430000000000017 seconds

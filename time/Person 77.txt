@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 77 = 22.301999999999985 seconds

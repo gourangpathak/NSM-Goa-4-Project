@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 82 = 31.4609999999999 seconds

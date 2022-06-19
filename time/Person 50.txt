@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 50 = 9.552999999999999 seconds

@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 42 = 27.163000000000014 seconds

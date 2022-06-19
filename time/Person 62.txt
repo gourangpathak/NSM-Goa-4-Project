@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 62 = 25.501000000000015 seconds

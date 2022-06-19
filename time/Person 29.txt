@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 29 = 11.004000000000001 seconds

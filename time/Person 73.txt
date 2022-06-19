@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 73 = 26.833000000000013 seconds

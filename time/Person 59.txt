@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 59 = 21.422000000000004 seconds

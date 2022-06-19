@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 19 = 1.8389999999999997 seconds
+Time to Reach the door_reached by person 19 = 1.8050000000000002 seconds

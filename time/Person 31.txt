@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 31 = 13.581000000000005 seconds

@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 75 = 34.198000000000214 seconds

@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 30 = 12.796000000000001 seconds

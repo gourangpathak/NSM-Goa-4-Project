@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 64 = 22.817999999999987 seconds

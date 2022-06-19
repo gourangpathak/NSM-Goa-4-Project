@@ -1,55 +1,55 @@
-# Programming evacuation systems using Crowd Simulation
-# Agent-Based Modelling
-# Loading the pygame package
-from turtle import screensize
-import pygame
-# Importing locals
-from pygame.locals import *
-# Other packages
+import os
 import sys
-import numpy as np
-import numpy.random as random
 import math
 import time
-import os
-from model_parameters import positionmatrix,nr_agents,walls,distance_agent_to_wall,normalize,g
+import pygame
+import numpy as np
+import numpy.random as random
+from pygame.locals import *
+from turtle import screensize
+from model_parameters import locations, N, walls, wall_distance, normalize, g
 
-a = 1
-while a <= nr_agents:
+a = 1 
+while a <= N:
     path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\positions'
-    file_name1 = "Person " + str(a) +".txt"
-    file_name2 = "Person " + str(a) +".txt"
+    file_name = "Person " + str(a) +".txt"
         
-    with open(os.path.join(path, file_name1), 'w') as fp:
+    with open(os.path.join(path, file_name), 'w') as fp:
         fp.write("Person " + str(a) + "\n")
         fp.write("Starting Position = ")
     a += 1
 
 b = 1
-while b <= nr_agents:
+while b <= N:
     path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\time'
-    file_name1 = "Person " + str(b) +".txt"
-    file_name2 = "Person " + str(b) +".txt"
+    file_name = "Person " + str(b) +".txt"
         
-    with open(os.path.join(path, file_name2), 'w') as fp:
+    with open(os.path.join(path, file_name), 'w') as fp:
         fp.write("")
     b += 1
 
-data_folder1 = os.path.join(os.getcwd(), 'positions')
-data_folder2 = os.path.join(os.getcwd(), 'time')
+c = 1
+while c <= N:
+    path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\velocity'
+    file_name = "Person " + str(c) +".txt"
+        
+    with open(os.path.join(path, file_name), 'w') as fp:
+        fp.write("Person " + str(a) + "\n")
+        fp.write("Starting Actual Velocity = ")
+    c += 1
 
 pygame.init()
 pygame.font.init() 
-timefont = pygame.font.SysFont('John Hubbard', 30)
+timefont = pygame.font.SysFont('Arial', 30)
 
 """ 
 Creating a screen with a room that is smaller than then screen 
 """
 
 # Size of the screen
-width = 800
-height = 800  
-size = width, height # Do not adjust this
+screenwidth = 800
+screenheight = 800  
+size = screenwidth, screenheight
 
 # Creating screen
 roomscreen = pygame.display.set_mode(size)
@@ -57,7 +57,6 @@ roomscreen = pygame.display.set_mode(size)
 # Making background white and creating colors
 WHITE = (255,255,255)
 RED = (255,0,0)
-GREEN = (0,255,0)
 BLACK = (0,0,0)
 background_color = BLACK
 roomscreen.fill(background_color)
@@ -66,106 +65,90 @@ pygame.display.update()
 # Defining clock
 clock = pygame.time.Clock()
 
-# Creating evacuation object class
-class Agent(object):
+# Making a Person Class
+class Person(object):
     def __init__(self):
-        self.agentNumber = 0
-        self.mass = 80 # random.uniform(40,90)
-        self.radius = 20
-        # random initialize a agent
+        self.personNumber = 0
+        self.mass = 80 
+        self.shoulder_radius = 20
         
-        self.x = random.uniform(100 + self.radius, 600 - self.radius)
-        self.y = random.uniform(100 + self.radius,700 - self.radius)
+        self.x = random.uniform(100 + self.shoulder_radius, 600 - self.shoulder_radius)
+        self.y = random.uniform(100 + self.shoulder_radius,700 - self.shoulder_radius)
         self.pos = np.array([self.x, self.y])
-        #self.pos = np.array([10.0, 10.0])
     
-        self.aVelocityX = 0 #random.uniform(0,1.6)
-        self.aVelocityY = 0 #random.uniform(0,1.6)
-        self.aVelocity = np.array([self.aVelocityX, self.aVelocityY])
-        #self.actualV = np.array([0.0, 0.0])
+        self.actual_X = 0 
+        self.actual_Y = 0 
+        self.actual_V = np.array([self.actual_X, self.actual_Y])
     
-        # self.dest = np.array([random.uniform(100,700),random.uniform(100,700)])
-        self.dest = np.array([700,400])
-        self.direction = normalize(self.dest - self.pos)
-        #self.direction = np.array([0.0, 0.0])
+        self.door_center = np.array([700,400])
+        self.dir = normalize(self.door_center - self.pos)
         
-        self.dSpeed = 12
-        self.dVelocity = self.dSpeed*self.direction
+        self.desiredSpeed = 12
+        self.desired_V = self.desiredSpeed*self.dir
         
-        self.acclTime = 0.25 #random.uniform(8,16) #10.0
-        self.drivenAcc = (self.dVelocity - self.aVelocity)/self.acclTime
+        self.tau = 0.25
+        self.acclrn = (self.desired_V - self.actual_V)/self.tau
               
         
-        self.bodyFactor = 120000
-        self.F = 2000
-        self.delta = 0.08*50  #random.uniform(0.8,1.6) #0.8 #0.08
-        
-        self.Goal = 0 # this represents if door is reached or not
+        self.K = 120000
+        self.A_i = 2000
+        self.B_i = 0.08*50
+
+        # this represents if door is reached or not
+        self.door_reached = 0 
         self.time = 0.0
-        self.countcollision = 0
-    	
-        print('X and Y Position:', self.pos)
-        print('self.direction:', self.direction)
-        
-    def velocity_force(self): # function to adapt velocity
-        deltaV = self.dVelocity - self.aVelocity
-        if np.allclose(deltaV, np.zeros(2)):
-            deltaV = np.zeros(2)
-        return deltaV*self.mass/self.acclTime
+        self.collisions = 0
+
+    # to calculate the 1st term	
+    def acceleration_term(self):
+        dV = self.desired_V - self.actual_V
+        if np.allclose(dV, np.zeros(2)):
+            dV = np.zeros(2)
+        return dV*self.mass/self.tau
     
-    
-    def f_ij(self, other): # interaction with people
-        r_ij = self.radius + other.radius
+    # interaction with people
+    def f_ij(self, other): 
         d_ij = np.linalg.norm(self.pos - other.pos)
-        e_ij = (self.pos - other.pos)/d_ij
-        value = self.F*np.exp((r_ij-d_ij)/(self.delta))*e_ij
-        + self.bodyFactor*g(r_ij-d_ij)*e_ij
+        r_ij = self.shoulder_radius + other.shoulder_radius
+        n_ij = (self.pos - other.pos)/d_ij
+        total = self.A_i*np.exp((r_ij-d_ij)/(self.B_i))*n_ij
+        + self.K*g(r_ij-d_ij)*n_ij
         
         if d_ij <= r_ij:
-            self.countcollision += 1
+            self.collisions += 1
             
-        return value
+        return total
     
-    def f_ik_wall(self, wall): # interaction with the wall in the room
-        r_i = self.radius
-        d_iw,e_iw = distance_agent_to_wall(self.pos,wall)
-        value = -self.F*np.exp((r_i-d_iw)/self.delta)*e_iw # Assume wall and people give same force
-        + self.bodyFactor*g(r_i-d_iw)*e_iw
-        return value
+    def f_iW(self, wall): # interaction with the wall in the room
+        d_iW,n_iW = wall_distance(self.pos,wall)
+        r_i = self.shoulder_radius
+        total = -self.A_i*np.exp((r_i-d_iW)/self.B_i)*n_iW 
+        + self.K*g(r_i-d_iW)*n_iW
+        return total
 
 def main():
-    # Now to let multiple objects move to the door we define
-    # nr_agents = nr_agents
-    agent_color = RED
-    line_color = WHITE
+    person_color = RED
+    wall_color = WHITE
     
-    
-    """ 
-    
-    Now we need to create the doors through which objects will leave in case of evacuation
-    This door's position can be determined using:
-    
-    """
-    
-    # initialize agents
-    agents = []
+    # initialize persons
+    persons = []
     
     # initialize the persons and their positions
-    def positions(agents):
-        for i in range(nr_agents):
-            agent = Agent()
-            agent.agentNumber = i+1
-            agent.walls = walls
-            agent.x = positionmatrix[i][0]
-            agent.y = positionmatrix[i][1]
-            agent.pos = np.array([agent.x, agent.y])
-            agent.radius = positionmatrix[i][2]
-            agent.mass = positionmatrix[i][3]
-            agent.dSpeed = positionmatrix[i][4]
-            agents.append(agent)
+    def positions(persons):
+        for i in range(N):
+            person = Person()
+            person.personNumber = i+1
+            person.walls = walls
+            person.x = locations[i][0]
+            person.y = locations[i][1]
+            person.pos = np.array([person.x, person.y])
+            person.shoulder_radius = locations[i][2]
+            person.mass = locations[i][3]
+            person.desiredSpeed = locations[i][4]
+            persons.append(person)
         
     # call the positions method
-    positions(agents)    
+    positions(persons)    
     
     # count to loop over our persons
     count = 0
@@ -176,14 +159,13 @@ def main():
     while run:
         
         # Updating time
-        if count < nr_agents - 2:
+        if count < N - 2:
             current_time = time.time()
-            elapsed_time = current_time - start_time
+            time_taken = current_time - start_time
         else:
-            for agent_i in agents:
-                agents.remove(agent_i)
-        
-        # Finding delta t for this frame
+            for P_i in persons:
+                persons.remove(P_i)
+
         dt = clock.tick(70)/1000
         
         for event in pygame.event.get():
@@ -201,56 +183,61 @@ def main():
             end_posw = np.array([wall[2],wall[3]])
             start_posx = start_posw 
             end_posx = end_posw
-            pygame.draw.line(roomscreen, line_color, start_posx, end_posx, 3)
+            pygame.draw.line(roomscreen, wall_color, start_posx, end_posx, 3)
         
-        for agent_i in agents:
-            agent_i.direction = normalize(agent_i.dest - agent_i.pos)
-            agent_i.dVelocity = agent_i.dSpeed*agent_i.direction
-            aVelocity_force = agent_i.velocity_force()
-            people_interaction = 0.0
-            wall_interaction = 0.0
+        for P_i in persons:
+            P_i.dir = normalize(P_i.door_center - P_i.pos)
+            P_i.desired_V = P_i.desiredSpeed*P_i.dir
+            term_1 = P_i.acceleration_term()
+            people_Force = 0.0
+            wall_Force = 0.0
         
-            for agent_j in agents: 
-                if agent_i == agent_j: continue
-                people_interaction += agent_i.f_ij(agent_j)
+            for P_j in persons: 
+                if P_i == P_j: continue
+                people_Force += P_i.f_ij(P_j)
         
             for wall in walls:
-                wall_interaction += agent_i.f_ik_wall(wall)
+             wall_Force += P_i.f_iW(wall)
             
-            sumForce = aVelocity_force + people_interaction + wall_interaction
-            dv_dt = sumForce/agent_i.mass
-            agent_i.aVelocity = agent_i.aVelocity + dv_dt*dt 
-            agent_i.pos = agent_i.pos + agent_i.aVelocity*dt
+            total_Force = term_1 + people_Force + wall_Force
+            acc = total_Force/P_i.mass
+            P_i.actual_V = P_i.actual_V + acc*dt 
+            P_i.pos = P_i.pos + P_i.actual_V*dt
 
-            path = str("positions/Person " + str(agent_i.agentNumber)+".txt")
+            path = str("positions/Person " + str(P_i.personNumber)+".txt")
             f = open(path, "a")
-            f.write("("+str(agent_i.pos[0])+","+str(agent_i.pos[1])+ ")\n")
+            f.write("("+str(P_i.pos[0])+","+str(P_i.pos[1])+ ")\n")
             f.close()
 
-            # Avoiding disappearing agents   
-            if agent_i.pos[0] > 750 or agent_i.pos[0] < 50 or agent_i.pos[1] > 750 or agent_i.pos[1] < 50:
+            path = str("velocity/Person " + str(P_i.personNumber)+".txt")
+            f = open(path, "a")
+            f.write(str(P_i.actual_V)+"\n")
+            f.close()
+
+            # Avoiding disappearing persons   
+            if P_i.pos[0] > 750 or P_i.pos[0] < 50 or P_i.pos[1] > 750 or P_i.pos[1] < 50:
                 main()
                 sys.exit()
             
-            agent_i.time += clock.get_time()/1000 
+            P_i.time += clock.get_time()/1000 
         
-            if int(agent_i.pos[0]) >= 699 and agent_i.Goal == 0:
-                agent_i.Goal = 1
-                path = str("time/Person " + str(agent_i.agentNumber)+".txt")
+            if int(P_i.pos[0]) >= 699 and P_i.door_reached == 0:
+                P_i.door_reached = 1
+                path = str("time/Person " + str(P_i.personNumber)+".txt")
                 f = open(path, "a")
-                f.write('Time to Reach the Goal by person '+ str(agent_i.agentNumber) + " = " + str(agent_i.time) + " seconds\n")
+                f.write('Time to Reach the door_reached by person '+ str(P_i.personNumber) + " = " + str(P_i.time) + " seconds\n")
                 f.close()
             
-            if int(agent_i.pos[0]) > 699 or int(agent_i.pos[0]) < 100:
+            if int(P_i.pos[0]) > 699 or int(P_i.pos[0]) < 100:
                 count += 1
-                agents.remove(agent_i)
+                persons.remove(P_i)
             
-            pygame.draw.circle(roomscreen, agent_color, agent_i.pos, round(agent_i.radius), 3)
+            pygame.draw.circle(roomscreen, person_color, P_i.pos, round(P_i.shoulder_radius), 3)
         
         # Present text on screen
-        timestr = "Timer : " +  str(elapsed_time)
+        timestr = "Timer : " +  str(time_taken)
         timesurface = timefont.render(timestr, False, (255, 255, 255))
-        roomscreen.blit(timesurface,(250,80))
+        roomscreen.blit(timesurface,(250,50))
 
         # Update the screen
         pygame.display.flip()

@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 27 = 19.037000000000013 seconds

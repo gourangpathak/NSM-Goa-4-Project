@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 38 = 15.882000000000003 seconds

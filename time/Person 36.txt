@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 36 = 28.012999999999977 seconds

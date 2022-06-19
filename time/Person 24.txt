@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 24 = 35.08300000000036 seconds

@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 6 = 26.371000000000013 seconds

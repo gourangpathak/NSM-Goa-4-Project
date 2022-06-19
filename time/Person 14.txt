@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 14 = 23.319999999999986 seconds

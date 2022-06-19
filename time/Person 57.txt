@@ -1,1 +1,1 @@
-Time to Reach the Goal by person 57 = 3.186 seconds
+Time to Reach the door_reached by person 57 = 3.214 seconds

@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 79 = 29.16899999999994 seconds

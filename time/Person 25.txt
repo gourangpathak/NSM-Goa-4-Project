@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 25 = 13.037000000000003 seconds

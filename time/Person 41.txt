@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 41 = 28.560999999999968 seconds

@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 71 = 19.405000000000015 seconds

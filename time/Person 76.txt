@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 76 = 37.98500000000069 seconds

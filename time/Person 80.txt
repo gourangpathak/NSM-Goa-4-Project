@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 80 = 6.806 seconds

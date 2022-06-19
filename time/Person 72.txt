@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 72 = 27.463999999999988 seconds

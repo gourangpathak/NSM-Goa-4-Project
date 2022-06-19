@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 44 = 39.933000000000945 seconds

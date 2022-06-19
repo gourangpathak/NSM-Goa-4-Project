@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 35 = 18.80500000000001 seconds

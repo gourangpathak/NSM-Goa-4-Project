@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 84 = 36.680000000000504 seconds

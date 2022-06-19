@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 47 = 22.613999999999987 seconds

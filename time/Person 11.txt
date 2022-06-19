@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 11 = 9.282 seconds

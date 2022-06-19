@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 21 = 21.876999999999992 seconds

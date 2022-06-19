@@ -1,0 +1,1 @@
+Time to Reach the door_reached by person 81 = 24.682000000000006 seconds
