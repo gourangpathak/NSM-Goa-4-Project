@@ -98,8 +98,6 @@ class Person(object):
     def acceleration_term(self): 
         dV = self.Vi_0 - self.Vi
         # if dV ~ 0 then I set dV = 0
-        if np.allclose(dV, np.zeros(2)):
-            dV = np.zeros(2)
         return dV*self.mass/self.tau
     
     
