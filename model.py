@@ -9,34 +9,34 @@ from pygame.locals import *
 from turtle import screensize
 from model_parameters import locations, N, walls, wall_distance, normalize, g
 
-a = 1 
-while a <= N:
-    path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\positions'
-    file_name = "Person " + str(a) +".txt"
+# a = 1 
+# while a <= N:
+#     path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\positions'
+#     file_name = "Person " + str(a) +".txt"
         
-    with open(os.path.join(path, file_name), 'w') as fp:
-        fp.write("Person " + str(a) + "\n")
-        fp.write("Starting Position = ")
-    a += 1
+#     with open(os.path.join(path, file_name), 'w') as fp:
+#         fp.write("Person " + str(a) + "\n")
+#         fp.write("Starting Position = ")
+#     a += 1
 
-b = 1
-while b <= N:
-    path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\time'
-    file_name = "Person " + str(b) +".txt"
+# b = 1
+# while b <= N:
+#     path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\time'
+#     file_name = "Person " + str(b) +".txt"
         
-    with open(os.path.join(path, file_name), 'w') as fp:
-        fp.write("")
-    b += 1
+#     with open(os.path.join(path, file_name), 'w') as fp:
+#         fp.write("")
+#     b += 1
 
-c = 1
-while c <= N:
-    path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\velocity'
-    file_name = "Person " + str(c) +".txt"
+# c = 1
+# while c <= N:
+#     path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\velocity'
+#     file_name = "Person " + str(c) +".txt"
         
-    with open(os.path.join(path, file_name), 'w') as fp:
-        fp.write("Person " + str(a) + "\n")
-        fp.write("Starting Actual Velocity = ")
-    c += 1
+#     with open(os.path.join(path, file_name), 'w') as fp:
+#         fp.write("Person " + str(a) + "\n")
+#         fp.write("Starting Actual Velocity = ")
+#     c += 1
 
 pygame.init()
 pygame.font.init() 
@@ -204,15 +204,15 @@ def main():
             P_i.actual_V = P_i.actual_V + acc*dt 
             P_i.pos = P_i.pos + P_i.actual_V*dt
 
-            path = str("positions/Person " + str(P_i.personNumber)+".txt")
-            f = open(path, "a")
-            f.write("("+str(P_i.pos[0])+","+str(P_i.pos[1])+ ")\n")
-            f.close()
+            # path = str("positions/Person " + str(P_i.personNumber)+".txt")
+            # f = open(path, "a")
+            # f.write("("+str(P_i.pos[0])+","+str(P_i.pos[1])+ ")\n")
+            # f.close()
 
-            path = str("velocity/Person " + str(P_i.personNumber)+".txt")
-            f = open(path, "a")
-            f.write(str(P_i.actual_V)+"\n")
-            f.close()
+            # path = str("velocity/Person " + str(P_i.personNumber)+".txt")
+            # f = open(path, "a")
+            # f.write(str(P_i.actual_V)+"\n")
+            # f.close()
 
             # Avoiding disappearing persons   
             if P_i.pos[0] > 750 or P_i.pos[0] < 50 or P_i.pos[1] > 750 or P_i.pos[1] < 50:
@@ -223,10 +223,10 @@ def main():
         
             if int(P_i.pos[0]) >= 699 and P_i.door_reached == 0:
                 P_i.door_reached = 1
-                path = str("time/Person " + str(P_i.personNumber)+".txt")
-                f = open(path, "a")
-                f.write('Time to Reach the door_reached by person '+ str(P_i.personNumber) + " = " + str(P_i.time) + " seconds\n")
-                f.close()
+                # path = str("time/Person " + str(P_i.personNumber)+".txt")
+                # f = open(path, "a")
+                # f.write('Time to Reach the door_reached by person '+ str(P_i.personNumber) + " = " + str(P_i.time) + " seconds\n")
+                # f.close()
             
             if int(P_i.pos[0]) > 699 or int(P_i.pos[0]) < 100:
                 count += 1

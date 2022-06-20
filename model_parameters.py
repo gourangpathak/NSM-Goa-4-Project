@@ -11,8 +11,8 @@ room_left = 100 # left pixels coordinate
 room_top = 100 # top pixels coordeinate
 
 # Door 
-door_ytop = 382
-door_ybottom = 418
+door_ytop = 380
+door_ybottom = 420
     
 # Assigning Random Seed Value
 random.seed(123)
@@ -30,20 +30,20 @@ def wall_distance(point, wall):
     p0 = np.array([wall[0],wall[1]])
     p1 = np.array([wall[2],wall[3]])
     d = p1-p0
-    ymp0 = point-p0
-    t = np.dot(d,ymp0)/np.dot(d,d)
-    if t <= 0.0:
-        dist = np.sqrt(np.dot(ymp0,ymp0))
-        cross = p0 + t*d
-    elif t >= 1.0:
-        ymp1 = point-p1
-        dist = np.sqrt(np.dot(ymp1,ymp1))
-        cross = p0 + t*d
+    r0 = point-p0
+    proj = np.dot(d,r0)/np.dot(d,d)
+    if proj <= 0.0:
+        distance = np.sqrt(np.dot(r0,r0))
+        cross_product = p0 + proj*d
+    elif proj >= 1.0:
+        r1 = point-p1
+        distance = np.sqrt(np.dot(r1,r1))
+        cross_product = p0 + proj*d
     else:
-        cross = p0 + t*d
-        dist = np.linalg.norm(cross-point)
-    npw = normalize(cross-point)
-    return dist,npw
+        cross_product = p0 + proj*d
+        distance = np.linalg.norm(cross_product-point)
+    direction = normalize(cross_product-point)
+    return distance,direction
 
 walls = [[room_left, room_top, room_left + room_width, room_top], 
 [room_left, room_top+room_height, room_left, room_top], 
@@ -89,11 +89,11 @@ for i in range(0,N):
             # loop over other people
             for position in [locations[i] for i in range(0, persons_found)]:
                 # find out the distance between others and our current person
-                dist = math.sqrt((position[0]-x)**2 + (position[1]-y)**2)
+                distance = math.sqrt((position[0]-x)**2 + (position[1]-y)**2)
                 # if valid (i.e. for all other persons shoulders the sum of their shoulder
                 # shoulder_radius and that of our current person which we are looking for should be less
                 # than the distance between the 2 persons) then increment person count
-                if dist > position[2] + shoulder_radius: 
+                if distance > position[2] + shoulder_radius: 
                     count_persons += 1
             # If the number of persons found so far which are valid is equal to the 
             if count_persons == i and wall_collision == 0:
