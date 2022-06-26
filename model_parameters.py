@@ -95,7 +95,7 @@ for i in range(0,N):
                 # than the distance between the 2 persons) then increment person count
                 if distance > position[2] + shoulder_radius: 
                     count_persons += 1
-            # If the number of persons found so far which are valid is equal to the 
+            # If the number of persons found so far which are valid is equal to the current size of the pool of people
             if count_persons == i and wall_collision == 0:
                 found = True
                 persons_found += 1 

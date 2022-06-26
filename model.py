@@ -38,13 +38,11 @@ from model_parameters import locations, N, walls, wall_distance, normalize, g
 #         fp.write("Starting Actual Velocity = ")
 #     c += 1
 
+f = open("data.xyz", "a");
+
 pygame.init()
 pygame.font.init() 
 timefont = pygame.font.SysFont('Arial', 30)
-
-""" 
-Creating a screen with a room that is smaller than then screen 
-"""
 
 # Size of the screen
 screenwidth = 800
@@ -150,7 +148,7 @@ def main():
     # call the positions method
     positions(persons)    
     
-    # count to loop over our persons
+    # count to count the number of people who have crossed the door
     count = 0
     start_time = time.time()
     run = True
@@ -166,7 +164,7 @@ def main():
             for P_i in persons:
                 persons.remove(P_i)
 
-        dt = clock.tick(70)/1000
+        dt = clock.tick(50)/1000
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -185,6 +183,9 @@ def main():
             end_posx = end_posw
             pygame.draw.line(roomscreen, wall_color, start_posx, end_posx, 3)
         
+        f.write("\n"+str(len(persons))+"\n")
+        f.write("Positions\n")
+
         for P_i in persons:
             P_i.dir = normalize(P_i.door_center - P_i.pos)
             P_i.desired_V = P_i.desiredSpeed*P_i.dir
@@ -204,6 +205,10 @@ def main():
             P_i.actual_V = P_i.actual_V + acc*dt 
             P_i.pos = P_i.pos + P_i.actual_V*dt
 
+
+            
+            f.write(str(P_i.personNumber) + " " + str(P_i.pos[0]) + " " + str(P_i.pos[1]) + " 0\n")
+
             # path = str("positions/Person " + str(P_i.personNumber)+".txt")
             # f = open(path, "a")
             # f.write("("+str(P_i.pos[0])+","+str(P_i.pos[1])+ ")\n")
@@ -215,13 +220,13 @@ def main():
             # f.close()
 
             # Avoiding disappearing persons   
-            if P_i.pos[0] > 750 or P_i.pos[0] < 50 or P_i.pos[1] > 750 or P_i.pos[1] < 50:
-                main()
-                sys.exit()
+            # if P_i.pos[0] > 750 or P_i.pos[0] < 50 or P_i.pos[1] > 750 or P_i.pos[1] < 50:
+            #     main()
+            #     sys.exit()
             
             P_i.time += clock.get_time()/1000 
         
-            if int(P_i.pos[0]) >= 699 and P_i.door_reached == 0:
+            if int(P_i.pos[0]) >= 699  and P_i.door_reached == 0:
                 P_i.door_reached = 1
                 # path = str("time/Person " + str(P_i.personNumber)+".txt")
                 # f = open(path, "a")
@@ -241,7 +246,7 @@ def main():
 
         # Update the screen
         pygame.display.flip()
-        
+    f.close()    
     pygame.quit()
 main()
 
