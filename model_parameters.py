@@ -34,15 +34,15 @@ def wall_distance(point, wall):
     proj = np.dot(d,r0)/np.dot(d,d)
     if proj <= 0.0:
         distance = np.sqrt(np.dot(r0,r0))
-        cross_product = p0 + proj*d
+        proj_coordinate = p0 + proj*d
     elif proj >= 1.0:
         r1 = point-p1
         distance = np.sqrt(np.dot(r1,r1))
-        cross_product = p0 + proj*d
+        proj_coordinate = p0 + proj*d
     else:
-        cross_product = p0 + proj*d
-        distance = np.linalg.norm(cross_product-point)
-    direction = normalize(cross_product-point)
+        proj_coordinate = p0 + proj*d
+        distance = np.linalg.norm(proj_coordinate-point)
+    direction = normalize(proj_coordinate-point)
     return distance,direction
 
 walls = [[room_left, room_top, room_left + room_width, room_top], 
@@ -69,7 +69,7 @@ for i in range(0,N):
             r_i = shoulder_radius
             d_iW,n_iW = wall_distance(np.array([x, y]),wall)
             '''
-            here for each wall we are calculating the distance between the wall and
+            Here for each wall we are calculating the distance between the wall and
             the person if the distance between the wall and the person is less than the
             shoulder shoulder_radius of the person we increment our wall_collision (i.e. storing the
             number of times wall has been encountered)
@@ -80,27 +80,33 @@ for i in range(0,N):
         # if there are some positions initialized
         if len([locations[i] for i in range(0, persons_found)]) > 0:
             '''
-            The count_persons variable will count how many persons found so far
-            are valid i.e. for all other persons shoulders the sum of their shoulder
-            shoulder_radius and that of our current person which we are looking for should be less
-            than the distance between the 2 persons
+                The count_persons variable will count how many persons found so far
+                are valid i.e. for all other persons shoulders the sum of their shoulder
+                shoulder_radius and that of our current person which we are looking for should be less
+                than the distance between the 2 persons
             '''
             count_persons = 0 
             # loop over other people
             for position in [locations[i] for i in range(0, persons_found)]:
                 # find out the distance between others and our current person
                 distance = math.sqrt((position[0]-x)**2 + (position[1]-y)**2)
-                # if valid (i.e. for all other persons shoulders the sum of their shoulder
-                # shoulder_radius and that of our current person which we are looking for should be less
-                # than the distance between the 2 persons) then increment person count
+                '''
+                    If valid (i.e. for all other persons shoulders the sum of their shoulder
+                    shoulder_radius and that of our current person which we are looking for should be less
+                    than the distance between the 2 persons) then increment person count
+                '''
+                
                 if distance > position[2] + shoulder_radius: 
                     count_persons += 1
             # If the number of persons found so far which are valid is equal to the current size of the pool of people
             if count_persons == i and wall_collision == 0:
                 found = True
                 persons_found += 1 
-        # if none of the positions are initialized & the wall interaction = 0 then just 
-        # increment the number of persons found
+            '''
+                if none of the positions are initialized & the wall interaction = 0 then just 
+                increment the number of persons found
+            '''
+        
         elif wall_collision == 0:
             found = True
             persons_found += 1 
