@@ -43,7 +43,8 @@ def wall_distance(point, wall):
         proj_coordinate = p0 + proj*d
         distance = np.linalg.norm(proj_coordinate-point)
     direction = normalize(proj_coordinate-point)
-    return distance,direction
+    tangentWall = [-direction[1], direction[0]]
+    return distance,direction,tangentWall
 
 walls = [[room_left, room_top, room_left + room_width, room_top], 
 [room_left, room_top+room_height, room_left, room_top], 
@@ -67,7 +68,7 @@ for i in range(0,N):
         y = np.random.uniform(100,700) # random y coordinate in room
         for wall in walls:
             r_i = shoulder_radius
-            d_iW,n_iW = wall_distance(np.array([x, y]),wall)
+            d_iW,n_iW,t_iW = wall_distance(np.array([x, y]),wall)
             '''
             Here for each wall we are calculating the distance between the wall and
             the person if the distance between the wall and the person is less than the

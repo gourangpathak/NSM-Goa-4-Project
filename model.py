@@ -9,6 +9,7 @@ from pygame.locals import *
 from turtle import screensize
 from model_parameters import locations, N, walls, wall_distance, normalize, g
 
+# FILE HANDLING ROUTINE
 # a = 1 
 # while a <= N:
 #     path = r'C:\\Users\\Gourang Pathak\\Desktop\\Gourang\\NSM-Goa-4-Project\\positions'
@@ -38,7 +39,7 @@ from model_parameters import locations, N, walls, wall_distance, normalize, g
 #         fp.write("Starting Actual Velocity = ")
 #     c += 1
 
-f = open("data.xyz", "a");
+f = open("data.xyz", "a")
 
 pygame.init()
 pygame.font.init() 
@@ -89,6 +90,7 @@ class Person(object):
               
         
         self.K = 120000
+        self.kappa = 240000
         self.A_i = 2000
         self.B_i = 0.08*50
 
@@ -109,19 +111,21 @@ class Person(object):
         d_ij = np.linalg.norm(self.pos - other.pos)
         r_ij = self.shoulder_radius + other.shoulder_radius
         n_ij = (self.pos - other.pos)/d_ij
+        t_ij = [-n_ij[1],n_ij[0]]
         total = self.A_i*np.exp((r_ij-d_ij)/(self.B_i))*n_ij
         + self.K*g(r_ij-d_ij)*n_ij
-        
+        + self.kappa*g(r_ij-d_ij)*(other.desired_V - self.desired_V)*t_ij
         if d_ij <= r_ij:
             self.collisions += 1
             
         return total
     
     def f_iW(self, wall): # interaction with the wall in the room
-        d_iW,n_iW = wall_distance(self.pos,wall)
+        d_iW,n_iW,t_iW = wall_distance(self.pos,wall)
         r_i = self.shoulder_radius
         total = -self.A_i*np.exp((r_i-d_iW)/self.B_i)*n_iW 
         + self.K*g(r_i-d_iW)*n_iW
+        + self.kappa*g(r_i-d_iW)*self.desired_V*t_iW
         return total
 
 def main():
@@ -164,7 +168,7 @@ def main():
             for P_i in persons:
                 persons.remove(P_i)
 
-        dt = clock.tick(50)/1000
+        dt = clock.tick(70)/1000
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -183,7 +187,7 @@ def main():
             end_posx = end_posw
             pygame.draw.line(roomscreen, wall_color, start_posx, end_posx, 3)
         
-        f.write("\n"+str(len(persons))+"\n")
+        f.write(str(len(persons))+"\n")
         f.write("Positions\n")
 
         for P_i in persons:
@@ -220,9 +224,9 @@ def main():
             # f.close()
 
             # Avoiding disappearing persons   
-            # if P_i.pos[0] > 750 or P_i.pos[0] < 50 or P_i.pos[1] > 750 or P_i.pos[1] < 50:
-            #     main()
-            #     sys.exit()
+            if P_i.pos[0] > 750 or P_i.pos[0] < 50 or P_i.pos[1] > 750 or P_i.pos[1] < 50:
+                main()
+                sys.exit()
             
             P_i.time += clock.get_time()/1000 
         
