@@ -191,6 +191,7 @@ def main():
         f.write("Positions\n")
 
         for P_i in persons:
+            pygame.draw.circle(roomscreen, person_color, P_i.pos, round(P_i.shoulder_radius), 100)
             P_i.dir = normalize(P_i.door_center - P_i.pos)
             P_i.desired_V = P_i.desiredSpeed*P_i.dir
             term_1 = P_i.acceleration_term()
@@ -241,7 +242,7 @@ def main():
                 count += 1
                 persons.remove(P_i)
             
-            pygame.draw.circle(roomscreen, person_color, P_i.pos, round(P_i.shoulder_radius), 3)
+            # pygame.draw.circle(roomscreen, person_color, P_i.pos, round(P_i.shoulder_radius), 3)
         
         # Present text on screen
         timestr = "Timer : " +  str(time_taken)
