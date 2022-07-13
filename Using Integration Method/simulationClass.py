@@ -1,14 +1,15 @@
 import sys
 import pygame
 import numpy as np
-import Integrators
-from Integrators import leap_frog
-from Room import Room
-from diff_equation import Diff_Equ
-from steps_function_quit import display_events
+import pandas as pd
+import Integrator
+from Integrator import intg
+from RoomParameters import Room
+from differentialEquation import Diff_Equ
+from pygameSimulation import simulate
 
 class Simulation:
-    def __init__(self, num_individuals, num_steps, method="leap_frog", tau=0.1, v_des=1.5, room="square",
+    def __init__(self, num_individuals, num_steps, method="intg", tau=0.1, v_des=1.5, room="square",
                  room_size=25):
 
         std_deviation = 0.07                    
@@ -32,7 +33,7 @@ class Simulation:
         
         # other
         self.room = Room(room, room_size)  # kind of room the simulation runs in
-        self.method = getattr(Integrators, method)  # method used for integration
+        self.method = getattr(Integrator, method)  # method used for integration
         self.diff_equ = Diff_Equ(self.N, self.L, self.tau, self.room, self.radii, self.m)  # initialize Differential equation
     
     # function set_time, set_steps give the possiblity to late change these variable when needed
@@ -41,7 +42,7 @@ class Simulation:
 
     # function to change the methode of integration if needed
     def set_methode(self, method):
-        self.method = getattr(Integrators, method)
+        self.method = getattr(Integrator, method)
 
     def dont_touch(self, i, x):  # yields false if people don't touch each other and true if they do
         for j in range(i - 1):
@@ -50,7 +51,7 @@ class Simulation:
         return False
 
     # fills the room with agents with random positions
-    def fill_room(self):
+    def fill_area(self):
         spawn = self.room.get_spawn_zone()
         len_right = spawn[0, 1] - spawn[0, 0]
         len_left = spawn[1, 1] - spawn[1, 0]
@@ -84,5 +85,5 @@ class Simulation:
 
     # Displayes the simulation in pygame
     def show(self, wait_time, sim_size):
-        print(self.y)
-        display_events(self.y, self.room, wait_time, self.radii, sim_size, self.agents_escaped)
+        # self.y.tofile('sample.csv',sep='\n')
+        simulate(self.y, self.room, wait_time, self.radii, sim_size, self.agents_escaped)

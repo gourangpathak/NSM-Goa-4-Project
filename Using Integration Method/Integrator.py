@@ -1,5 +1,36 @@
 import numpy as np
 
+def intg(y0, v0, f, N_steps, dt, room):
+    tmp = 0
+    agents_escaped = np.zeros(N_steps)
+
+    y = np.zeros((y0.shape[0], y0.shape[1], N_steps))
+    v = np.zeros((y0.shape[0], y0.shape[1], N_steps))
+    a = np.zeros((y0.shape[0], y0.shape[1], N_steps))
+
+    y[:,:,0] = y0
+
+    for k in range(N_steps-1):
+        a[:,:,k] = f(y[:,:,k], v[:,:,k])
+        v[:,:,k+1] = v[:,:,k] + dt*a[:,:,k]
+        y[:,:,k+1] = y[:,:,k] + dt*v[:,:,k+1]
+
+        for i in range(y.shape[1]):
+            # checks if there are two destination and calculates the distance to the closest destination
+            destination = np.zeros(len(room.get_destination()))
+            for count, des in enumerate(room.get_destination()):
+                destination[count] = np.linalg.norm(y[:, i, k + 1] - des)
+            distance = np.amin(destination)
+
+            if distance < 0.1:
+                y[:,i,k+1] = 10**6 * np.random.rand(2)       
+                # y[:,i,k+1] = y[:,i,k]       
+                tmp += 1             
+            
+        agents_escaped[k+1] = tmp
+
+    return y, agents_escaped, a
+
 def exp_euler(y0, v0, f, N_steps, dt, room):
     tmp = 0
     agents_escaped = np.zeros(N_steps)

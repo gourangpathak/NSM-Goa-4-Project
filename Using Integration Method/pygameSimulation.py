@@ -2,19 +2,17 @@ import pygame
 import numpy as np
 import matplotlib.pyplot as plt
 
-# example positions for test purposes
 movement_data = np.random.randint(20, 700, (2, 5, 5))
 objects_pos = np.random.randint(100, 700, (2, 10))
 
 
-def display_events(movement_data, room, wait_time, radii, sim_size, agents_escaped):
-    # colors
-    background_color = (0, 0, 0)            #grey
-    people_color = (250, 0, 0)                    #red
-    destination_color = (0, 128, 0)               # green
-    object_color = (255, 255, 255)                      #black
+def simulate(movement_data, room, wait_time, radii, sim_size, agents_escaped):
+    background_color =(43, 44, 41)       
+    people_color = (250, 0, 0)                    
+    destination_color = (20, 56, 36)               
+    object_color = (0, 0, 0)                      
 
-    # variable for initializing pygame
+    # variable for initializing pygame simulation
     normalizer = int(sim_size/room.get_room_size()) # the ratio (size of image) / (size of actual room) 
     map_size = (room.get_room_size()*normalizer + 100,  #size of the map
                 room.get_room_size()*normalizer + 100)  #plus a little free space
@@ -39,9 +37,9 @@ def display_events(movement_data, room, wait_time, radii, sim_size, agents_escap
                 pygame.quit()
         worldmap.fill(0)
         #This creates a new surface with text already drawn onto it
-        text = font.render('Press any key to start the simulation', True, (255, 255, 255))
+        text = font.render('Start Simulating', True, (255, 255, 255))
         #printing the text starting with a 'distance' of (100,100) from top left
-        worldmap.blit(text, (100, 100))
+        worldmap.blit(text, (200, 200))
         pygame.display.update()
         
         if simulate == True:
@@ -83,7 +81,4 @@ def display_events(movement_data, room, wait_time, radii, sim_size, agents_escap
             pygame.display.update()
             pygame.time.wait(wait_time_after_sim)
             
-            #Uncomment to exit function instead of going back to the loop
-            #pygame.quit()
-            #return
 
