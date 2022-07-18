@@ -1,6 +1,5 @@
-from simulationClass import Simulation
-
-sim = Simulation(num_individuals=50, num_steps=1000, method="ode45", room_size=10, room="square")
-sim.fill_area()                 
-sim.run()                      
-sim.show(wait_time=200, sim_size=800)   
+from modelClass import Model
+ins = Model(N=5, steps=1000, method="intg", room_size=30, desired_v = 1.5, room="square")
+ins.populate()                 
+ins.set()                      
+ins.run(100, 700)   

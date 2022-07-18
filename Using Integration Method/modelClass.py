@@ -5,53 +5,41 @@ import pandas as pd
 import Integrator
 from Integrator import intg
 from RoomParameters import Room
-from differentialEquation import Diff_Equ
+from differentialEquation import Differential_Equation
 from pygameSimulation import simulate
 
-class Simulation:
-    def __init__(self, num_individuals, num_steps, method="intg", tau=0.1, v_des=1.5, room="square",
+class Model:
+    def __init__(self, N, steps, method="intg", tau=0.1, desired_v=1.5, room="square",
                  room_size=25):
-
         std_deviation = 0.07                    
-        variation = np.random.normal(loc=1, scale=std_deviation, size=(1, num_individuals)) # is late used to make the agents differ in weight and size
+        variation = np.random.normal(loc=1, scale=std_deviation, size=(1, N)) # is late used to make the agents differ in weight and size
 
-        # Constants
+        # Parameters
         self.L = room_size  # size of square room (m)
-        self.N = num_individuals  # quantity of pedestrians
+        self.N = N  # quantity of pedestrians
         self.tau = tau  # time-step (s)
-        self.num_steps = num_steps  # number of steps for integration
-
-        # Agent information
+        self.steps = steps  # number of steps for integration
         self.radii = 0.4 * (np.ones(self.N)*variation).squeeze()  # radii of pedestrians (m)
-        self.v_des = v_des * np.ones(self.N)  # desired velocity (m/s)
+        self.desired_v = desired_v * np.ones(self.N)  # desired velocity (m/s)
         self.m = 80 * (np.ones(self.N)*variation).squeeze()  # mass of pedestrians (kg)
         self.forces = None              # forces on the agents
         self.agents_escaped = None    #number of agents escaped by timesteps
-        self.v = np.zeros((2, self.N, self.num_steps))  # Three dimensional array of velocity
+        self.v = np.zeros((2, self.N, self.steps))  # Three dimensional array of velocity
         self.y = np.zeros(
-            (2, self.N, self.num_steps))  # Three dimensional array of place: x = coordinates, y = Agent, z=Time
-        
-        # other
+            (2, self.N, self.steps))  # Three dimensional array of place: x = coordinates, y = Agent, z=Time
         self.room = Room(room, room_size)  # kind of room the simulation runs in
         self.method = getattr(Integrator, method)  # method used for integration
-        self.diff_equ = Diff_Equ(self.N, self.L, self.tau, self.room, self.radii, self.m)  # initialize Differential equation
-    
-    # function set_time, set_steps give the possiblity to late change these variable when needed
-    def set_steps(self, steps):
-        self.num_steps = steps
+        self.diff_equ = Differential_Equation(self.N, self.L, self.tau, self.room, self.radii, self.m)  # initialize Differential equation
 
-    # function to change the methode of integration if needed
-    def set_methode(self, method):
-        self.method = getattr(Integrator, method)
-
-    def dont_touch(self, i, x):  # yields false if people don't touch each other and true if they do
+    # yields true if 2 person touch
+    def touch(self, i, x): 
         for j in range(i - 1):
             if np.linalg.norm(x - self.y[:, j, 0]) < 3 * self.radii[i]:
                 return True
         return False
 
     # fills the room with agents with random positions
-    def fill_area(self):
+    def populate(self):
         spawn = self.room.get_spawn_zone()
         len_right = spawn[0, 1] - spawn[0, 0]
         len_left = spawn[1, 1] - spawn[1, 0]
@@ -71,19 +59,19 @@ class Simulation:
             pos = [x, y]
 
             # The pedestrians don't touch each other
-            while self.dont_touch(i, x):
+            while self.touch(i, x):
                 x = len_right * np.random.rand() + spawn[0, 0]
                 y = len_left * np.random.rand() + spawn[1, 0]
                 pos = [x, y]
             self.y[:, i, 0] = pos
 
-        self.v[:, :, 0] = self.v_des * self.diff_equ.e_t(self.y[:, :, 0])
+        self.v[:, :, 0] = self.desired_v * self.diff_equ.e_t(self.y[:, :, 0])
 
     # calls the method of integration with the starting positions, diffequatial equation, number of steps, and delta t = tau
-    def run(self):
-        self.y, self.agents_escaped, self.forces = self.method(self.y[:, :, 0], self.v[:, :, 0], self.diff_equ.f, self.num_steps, self.tau, self.room)
+    def set(self):
+        self.y, self.agents_escaped, self.forces = self.method(self.y[:, :, 0], self.v[:, :, 0], self.diff_equ.f, self.steps, self.tau, self.room)
 
     # Displayes the simulation in pygame
-    def show(self, wait_time, sim_size):
+    def run(self, time, size):
         # self.y.tofile('sample.csv',sep='\n')
-        simulate(self.y, self.room, wait_time, self.radii, sim_size, self.agents_escaped)
+        simulate(self.y, self.room, time, self.radii, size, self.agents_escaped)

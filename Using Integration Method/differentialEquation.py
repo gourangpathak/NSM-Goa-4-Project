@@ -1,6 +1,6 @@
 import numpy as np
 
-class Diff_Equ:
+class Differential_Equation:
     def __init__(self, num_individuals, L, tau, room, radii, weights):
         # Initial conditions
         self.room = room                            #import class room as room
