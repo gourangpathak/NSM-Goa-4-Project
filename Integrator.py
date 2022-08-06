@@ -1,99 +1,4 @@
 import numpy as np
-
-def intg(y0, v0, f, N_steps, dt, room):
-    tmp = 0
-    agents_escaped = np.zeros(N_steps)
-
-    y = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-    v = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-    a = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-
-    y[:,:,0] = y0
-
-    for k in range(N_steps-1):
-        a[:,:,k] = f(y[:,:,k], v[:,:,k])
-        v[:,:,k+1] = v[:,:,k] + dt*a[:,:,k]
-        y[:,:,k+1] = y[:,:,k] + dt*v[:,:,k+1]
-
-        for i in range(y.shape[1]):
-            # checks if there are two destination and calculates the distance to the closest destination
-            destination = np.zeros(len(room.get_destination()))
-            for count, des in enumerate(room.get_destination()):
-                destination[count] = np.linalg.norm(y[:, i, k + 1] - des)
-            distance = np.amin(destination)
-
-            if distance < 0.1:
-                y[:,i,k+1] = 10**6 * np.random.rand(2)       
-                # y[:,i,k+1] = y[:,i,k]       
-                tmp += 1             
-            
-        agents_escaped[k+1] = tmp
-
-    return y, agents_escaped, a
-
-def exp_euler(y0, v0, f, N_steps, dt, room):
-    tmp = 0
-    agents_escaped = np.zeros(N_steps)
-
-    y = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-    v = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-    a = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-
-    y[:,:,0] = y0
-
-    for k in range(N_steps-1):
-        a[:,:,k] = f(y[:,:,k], v[:,:,k])
-        v[:,:,k+1] = v[:,:,k] + dt*a[:,:,k]
-        y[:,:,k+1] = y[:,:,k] + dt*v[:,:,k+1]
-
-        for i in range(y.shape[1]):
-            # checks if there are two destination and calculates the distance to the closest destination
-            destination = np.zeros(len(room.get_destination()))
-            for count, des in enumerate(room.get_destination()):
-                destination[count] = np.linalg.norm(y[:, i, k + 1] - des)
-            distance = np.amin(destination)
-
-            if distance < 0.1:
-                y[:,i,k+1] = 10**6 * np.random.rand(2)       
-                # y[:,i,k+1] = y[:,i,k]       
-                tmp += 1             
-            
-        agents_escaped[k+1] = tmp
-
-    return y, agents_escaped, a
-
-def leap_frog(y0, v0, f, N_steps, dt, room):
-
-    tmp = 0
-    agents_escaped = np.zeros(N_steps)
-
-    y = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-    v = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-    a = np.zeros((y0.shape[0], y0.shape[1], N_steps))
-    
-    y[:,:,0] = y0
-    v[:,:,0] += 0.5*dt*f(y[:,:,0], v[:,:,0])
-    
-    for k in range(N_steps-1):
-        y[:,:,k+1] = y[:,:,k] + dt*v[:,:,k]
-        a[:,:,k] = f(y[:,:,k], v[:,:,k])
-        v[:,:,k+1] = v[:,:,k] + dt*f(y[:,:,k+1], v[:,:,k] + dt*a[:,:,k])
-
-        for i in range(y.shape[1]):
-            destination = np.zeros(len(room.get_destination()))
-            for count, des in enumerate(room.get_destination()):
-                destination[count] = np.linalg.norm(y[:, i, k + 1] - des)
-            distance = np.amin(destination)
-
-            if distance < 0.1:
-                y[:,i,k+1] = 10**6 * np.random.rand(2)          
-                tmp += 1             
-
-        agents_escaped[k+1] = tmp
-
-    return y, agents_escaped, a
-    
-
 def odestep(y0, v0, f, t, dt, room, dtmin = 0.0001, tol = 0.00001, maxiter = 100000):
     ytemp = y0
     vtemp = v0
@@ -181,7 +86,7 @@ def odestep(y0, v0, f, t, dt, room, dtmin = 0.0001, tol = 0.00001, maxiter = 100
         
     return ytemp, vtemp
 
-def ode45(y0, v0, f, N_steps, dt, room):
+def intg(y0, v0, f, N_steps, dt, room):
     tmp = int(0)
     agents_escaped = np.zeros(N_steps)
     y = np.zeros((y0.shape[0], y0.shape[1], N_steps))
@@ -197,7 +102,6 @@ def ode45(y0, v0, f, N_steps, dt, room):
         a[:,:,k+1] = f(y[:,:,k+1], v[:,:,k+1])
 
         for i in range(y.shape[1]):
-            # checks if there are two destination and calculates the distance to the closets destination
             destination = np.zeros(len(room.get_destination()))
             for count, des in enumerate(room.get_destination()):
                 destination[count] = np.linalg.norm(y[:, i, k + 1] - des)

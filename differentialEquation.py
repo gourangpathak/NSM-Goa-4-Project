@@ -2,8 +2,7 @@ import numpy as np
 
 class Differential_Equation:
     def __init__(self, num_individuals, L, tau, room, radii, weights):
-        # Initial conditions
-        self.room = room                            #import class room as room
+        self.room = room                            
         self.N = num_individuals                    # quantity of agents
         self.m = weights                            # mass of agents (kg)
         self.v_0 = 1.5 * np.ones(self.N)            # desired velocity (m/s)
@@ -19,18 +18,15 @@ class Differential_Equation:
         self.walls = self.room.walls                # position of corner points of the walls
         self.wallshere = self.room.wallshere        # True if there are walls in the middle of the room
 
-    #Checks if an agent touches anotherone or a wall  
     def g(self, x):    
         if x < 0:
             return 0
         else:
             return x      
         
-    #Adds the radii of agents i and j
     def rad(self, i, j):  
         return self.radii[i] + self.radii[j]
 
-    #Distance between agent i at positon r and wall j
     def wall_distance(self, i, j, r):
         temp_wall      = self.walls[j,:,:]
         line_vec       = temp_wall[1,:]-temp_wall[0,:]
@@ -51,7 +47,6 @@ class Differential_Equation:
         t             = np.array([-n[1], n[0]])
         return distance, n, t, nearest   
     
-    #Distance between agent i and agent j
     def agent(self, i, j, r,v):
         d    = np.linalg.norm(r[:, i] - r[:, j])
         n    = (r[:, i] - r[:, j])/d
@@ -60,7 +55,6 @@ class Differential_Equation:
         dv_t = temp.dot(t)
         return d, n, t, dv_t
     
-    #Force between agent i and j
     def f_ij(self, i, j, r, v):  
         d, n, t, dv_t = self.agent(i, j, r,v)
         rad_ij = self.rad(i,j)
@@ -68,14 +62,12 @@ class Differential_Equation:
         b = self.kap * self.g(rad_ij - d) * dv_t
         return a * n + b * t
     
-    #Force between agent i and wall j
     def f_iW(self, i, j, r, v):  
         d,n,t = self.wall_distance(i, j, r)[:-1]
         a = self.A * np.exp((self.radii[i] - d) / self.B) + self.k * self.g(self.radii[i] - d)
         b = self.kap * self.g(self.radii[i] - d) * v[:, i].dot(t)
         return a * n - b * t
 
-    #point of intersection of two lines formed by the points (a1,a2), respectively (b1,b2)
     def seg_intersect(self, a1,a2,b1,b2):
         da = a2-a1
         db = b2-b1
@@ -85,11 +77,9 @@ class Differential_Equation:
         num = np.dot(dap, dp)
         return (num / denom.astype(float))*db + b1
 
-    #return true if the point c is between the two points a and b
     def is_between(self,a,b,c):
         return np.linalg.norm(a-c) + np.linalg.norm(c-b) == np.linalg.norm(a-b) 
     
-    #taking the right agent vector direction
     def direction(self,i,j,r):
         wall = self.walls[j,:,:]
         wall_norm = (wall[0,:]-wall[1,:])/np.linalg.norm(wall[0,:]-wall[1,:])
@@ -102,7 +92,6 @@ class Differential_Equation:
             e = self.e_0(r[:,i],i)
         return e 
 
-    #take the right direction in case of wall corner points
     def e_1(self,r_i,temp_wall,i,j):
         all_walls = self.walls[:,:,:]
         wall_norm = (temp_wall[0,:]-temp_wall[1,:])/np.linalg.norm(temp_wall[0,:]-temp_wall[1,:])
@@ -150,26 +139,17 @@ class Differential_Equation:
         return e
     
     
-    #take the nearest path if one agents has to overtake a wall
     def nearest_path(self,temp_wall,t_or_f,point,wall_norm,r_i,i):
         if (np.linalg.norm(self.r_D-temp_wall[0,:]) + np.linalg.norm(r_i-temp_wall[0,:])) <= (np.linalg.norm(self.r_D-temp_wall[1,:]) + np.linalg.norm(r_i-temp_wall[1,:])):
-            #if (t_or_f == 1 and np.linalg.norm(point-r_i)<2*self.radii[i]):
-            #    e =  wall_norm 
-            #else: 
             p = temp_wall[0,:] + wall_norm*2*self.radii[i]
             e = (-r_i+p)/np.linalg.norm(-r_i+p)
         else:
-            #if (t_or_f == 1 and np.linalg.norm(point-r_i)<2*self.radii[i]):
-            #    e =  - wall_norm 
-            #else:
             p = temp_wall[1,:] - wall_norm*2*self.radii[i]
             e = (-r_i+p)/np.linalg.norm(-r_i+p)
         return e
     
 
-    #Desired direction normalized for one agent
     def e_0(self, r, i):  
-        #If there are two destinations, then half of the people go to each destination
         if len(self.r_D) == 2:
             if i < self.N/2:
                 return (-r + self.r_D[0]) / np.linalg.norm(-r + self.r_D[0])
@@ -178,7 +158,6 @@ class Differential_Equation:
 
         return (-r + self.r_D) / np.linalg.norm(-r + self.r_D)
 
-    #Finding the nearest wall that ubstruct one person
     def nearest_wall(self,r_i):
         all_walls = self.walls[5:,:,:]
         distance = np.zeros((all_walls.shape[0]))
@@ -189,11 +168,8 @@ class Differential_Equation:
         return 5+np.argmin(distance)
   
 
-    #Desired direction normalized for all agents
     def e_t(self, r):
         e_temp = np.zeros((2, self.N))
-        #If there are additional walls the desired direction doesn't have to...
-        #...be the direction of a door.
         if self.wallshere == False: 
             for i in range(self.N):
                 e_temp[:, i] = self.e_0(r[:,i], i)
@@ -203,8 +179,6 @@ class Differential_Equation:
                 e_temp[:, i] = self.direction(i,j,r)
         return e_temp
 
-
-    #The interacting force of the agents to each other  
     def f_ag(self, r, v):
 
         f_agent = np.zeros((2, self.N))
@@ -216,7 +190,6 @@ class Differential_Equation:
         f_agent = np.sum(fij, 2)
         return f_agent
 
-    #The force of each wall acting on each agents
     def f_wa(self, r, v):
         f_wall = np.zeros((2, self.N))
         for i in range(self.N):
@@ -224,8 +197,6 @@ class Differential_Equation:
                 f_wall[:, i] += self.f_iW(i, j, r, v)
         return f_wall
     
-    #The diff_equation of our problem
-    #Calculates the accelaration of each agent
     def f(self, r, v):
         e_temp = self.e_t(r)
         acc = (self.v_0 * e_temp - v) / self.tau + self.f_ag(r, v) / self.m + self.f_wa(r, v) / self.m
