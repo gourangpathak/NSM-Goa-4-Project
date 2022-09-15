@@ -8,7 +8,9 @@ door as an agent based model and further deduce their motions based on
 
 ## Demo of Simulation for 50 Persons inside a Room
 
-![sim](https://user-images.githubusercontent.com/89131980/190402430-708b7ff7-7145-4027-8392-749507f74ed5.gif)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/89131980/190402430-708b7ff7-7145-4027-8392-749507f74ed5.gif" alt="Sublime's custom image"/>
+</p>
 
 Further I had to Analyze the flow rates and leaving times as a function of the 
 desired velocity, also observe the variation of Number of People Escaping the room
